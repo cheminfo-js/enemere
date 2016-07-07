@@ -1,0 +1,36 @@
+{
+  "name": "enemere",
+  "version": "0.0.0",
+  "description": "Software for visualization, processing and assignment of NMR spectra",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cheminfo-js/enemere.git"
+  },
+  "keywords": [
+    "NMR",
+    "processing",
+    "assignment",
+    "chemical",
+    "shift",
+    "1H",
+    "13C"
+  ],
+  "author": "Michaël Zasso",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cheminfo-js/enemere/issues"
+  },
+  "homepage": "https://github.com/cheminfo-js/enemere#readme",
+  "dependencies": {
+    "graphs": "git+https://github.com/NPellet/jsGraph.git",
+    "jcampconverter": "^2.5.1"
+  },
+  "devDependencies": {
+    "superagent": "^2.0.0",
+    "webpack": "^1.13.1"
+  }
+}
