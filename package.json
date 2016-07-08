@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/cheminfo-js/enemere#readme",
   "dependencies": {
-    "graphs": "git+https://github.com/NPellet/jsGraph.git",
+    "node-jsgraph": "^1.14.10-5",
     "jcampconverter": "^2.5.1"
   },
   "devDependencies": {
