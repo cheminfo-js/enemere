@@ -2,10 +2,13 @@
 
 const jcampconverter = require('jcampconverter');
 
+const EnemereState = require('./EnemereState');
+
 class Enemere {
     constructor() {
         this._fileLoader = null;
         this._mainView = null;
+        this._state = new EnemereState();
     }
 
     setFileLoader(func) {

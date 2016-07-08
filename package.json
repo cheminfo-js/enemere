@@ -26,8 +26,9 @@
   },
   "homepage": "https://github.com/cheminfo-js/enemere#readme",
   "dependencies": {
-    "node-jsgraph": "^1.14.10-5",
-    "jcampconverter": "^2.5.1"
+    "jcampconverter": "^2.5.1",
+    "nmr-metadata": "^1.0.0",
+    "node-jsgraph": "^1.14.10-5"
   },
   "devDependencies": {
     "superagent": "^2.0.0",
