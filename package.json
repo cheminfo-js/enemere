@@ -4,7 +4,9 @@
   "description": "Software for visualization, processing and assignment of NMR spectra",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --config webpack.config.dev.js",
+    "dev-watch": "webpack --config webpack.config.dev.js --progress --colors --watch"
   },
   "repository": {
     "type": "git",
@@ -26,8 +28,10 @@
   },
   "homepage": "https://github.com/cheminfo-js/enemere#readme",
   "dependencies": {
-    "jcampconverter": "^2.5.1",
+    "jcampconverter": "^2.6.0",
+    "js-range": "^1.0.0",
     "ml-conrec": "0.0.2",
+    "ml-stat": "^1.2.0",
     "nmr-metadata": "^1.0.0",
     "node-jsgraph": "^1.14.10-5"
   },
