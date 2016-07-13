@@ -10,6 +10,8 @@ class Enemere {
         this.mainView = null;
         this.spectra = [];
         this.zoomLevel = 1;
+        this.width = 0;
+        this.height = 0;
     }
 
     setFileLoader(func) {
@@ -18,6 +20,7 @@ class Enemere {
 
     setMainView(dom) {
         this.mainView = dom;
+        this.resize();
         this.graph = new Graph(dom, {
             plugins: {zoom: {
                 zoomMode: 'xy'
@@ -35,6 +38,15 @@ class Enemere {
                 callback: (event) => this.handleMousewheel(event)
             }]
         });
+    }
+
+    resize() {
+        if (this.mainView) {
+            const width = this.mainView.clientWidth;
+            const height = this.mainView.clientHeight;
+            this.width = width;
+            this.height = height;
+        }
     }
 
     loadJcamp(path) {
@@ -79,7 +91,6 @@ class Enemere {
             this.zoomLevel++;
             this.redraw2D();
         } else {
-            if (this.zoomLevel === 1) return;
             this.zoomLevel--;
             this.redraw2D();
         }

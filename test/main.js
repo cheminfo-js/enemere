@@ -16,4 +16,4 @@ enemere.setFileLoader(function (filename) {
 
 enemere.setMainView(document.getElementById('mainView'));
 
-enemere.loadJcamp('data/ethylbenzene_noise/cosy_0.jdx');
+enemere.loadJcamp('data/ethylbenzene_noise/hmbc_0.jdx');

@@ -47,8 +47,8 @@ class Spectrum {
                 throw new Error('2D data is missing');
             }
             this.minMax = parsed.minMax;
-            const xs = getRange(parsed.minMax.minX, parsed.minMax.maxX, parsed.minMax.z.length);
-            const ys = getRange(parsed.minMax.minY, parsed.minMax.maxY, parsed.minMax.z[0].length);
+            const xs = getRange(parsed.minMax.minY, parsed.minMax.maxY, parsed.minMax.z.length);
+            const ys = getRange(parsed.minMax.minX, parsed.minMax.maxX, parsed.minMax.z[0].length);
             this.conrec = new Conrec(parsed.minMax.z, {xs, ys});
         } else {
             throw new Error('unexpected dimension: ' + this.dimension);
@@ -103,10 +103,10 @@ function getRange(min, max, length, exp) {
 
 function conrecToNorman(contours, minMax) {
     var data = {
-        minX: minMax.minX,
-        maxX: minMax.maxX,
-        minY: minMax.minY,
-        maxY: minMax.maxY,
+        minX: minMax.minY,
+        maxX: minMax.maxY,
+        minY: minMax.minX,
+        maxY: minMax.maxX,
         segments: []
     };
     var segments = data.segments;
@@ -118,7 +118,7 @@ function conrecToNorman(contours, minMax) {
         };
         var segment = segments[contour.k].lines;
         for (var j = 0; j < contour.length - 1; j++) {
-            segment.push(contour[j].x, contour[j].y, contour[j + 1].x, contour[j + 1].y);
+            segment.push(contour[j].y, contour[j].x, contour[j + 1].y, contour[j + 1].x);
         }
     }
     return data;
