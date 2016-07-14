@@ -3,47 +3,30 @@
 const Graph = require('node-jsgraph');
 
 const Spectrum = require('./Spectrum');
+const State = require('./State');
 
 class Enemere {
-    constructor() {
+    constructor(dom, options = {}) {
+        this.dom = {
+            root: dom
+        };
+        this.state = new State(options.state);
         this.fileLoader = null;
-        this.mainView = null;
         this.spectra = [];
         this.zoomLevel = 1;
         this.width = 0;
         this.height = 0;
+        this.setupDom();
     }
 
     setFileLoader(func) {
         this.fileLoader = func;
     }
 
-    setMainView(dom) {
-        this.mainView = dom;
-        this.resize();
-        this.graph = new Graph(dom, {
-            plugins: {zoom: {
-                zoomMode: 'xy'
-            }},
-            mouseActions: [{
-                plugin: 'zoom'
-            },{
-                plugin: 'zoom',
-                type: 'dblclick',
-                options: {
-                    mode: 'total'
-                }
-            },{
-                type: 'mousewheel',
-                callback: (event) => this.handleMousewheel(event)
-            }]
-        });
-    }
-
-    resize() {
-        if (this.mainView) {
-            const width = this.mainView.clientWidth;
-            const height = this.mainView.clientHeight;
+    onResize() {
+        if (this.dom.root) {
+            const width = this.dom.root.clientWidth;
+            const height = this.dom.root.clientHeight;
             this.width = width;
             this.height = height;
         }
@@ -95,6 +78,68 @@ class Enemere {
             this.redraw2D();
         }
     }
+
+    setupDom() {
+        this.dom.root.innerHTML = '';
+        this.onResize();
+        this.dom.main = getDiv('height: 100%; width: 100%; display: flex; flex-direction: column');
+        this.dom.root.appendChild(this.dom.main);
+
+        this.dom.menu = getDiv('height: 40px', 'top menu');
+        this.dom.main.appendChild(this.dom.menu);
+
+        this.dom.content = getDiv('flex: 1; display: flex');
+        this.dom.main.appendChild(this.dom.content);
+
+        this.dom.table = getDiv('width: 200px; display: flex; flex-direction: column');
+        this.dom.content.appendChild(this.dom.table);
+
+        this.dom.data = getDiv('height: 40%; display: flex');
+        this.dom.table.appendChild(this.dom.data);
+
+        this.dom.dataTools = getDiv('width: 40px', 'DT');
+        this.dom.data.appendChild(this.dom.dataTools);
+
+        this.dom.dataList = getDiv('flex: 1', 'DataList');
+        this.dom.data.appendChild(this.dom.dataList);
+
+        this.dom.pages = getDiv('flex: 1; display: flex');
+        this.dom.table.appendChild(this.dom.pages);
+
+        this.dom.pagesTools = getDiv('width: 40px', 'PT');
+        this.dom.pages.appendChild(this.dom.pagesTools);
+
+        this.dom.pagesList = getDiv('flex: 1', 'PagesList');
+        this.dom.pages.appendChild(this.dom.pagesList);
+
+        this.dom.graphs = getDiv('flex: 1');
+        this.dom.content.appendChild(this.dom.graphs);
+
+            this.graph = new Graph(this.dom.graphs, {
+            plugins: {zoom: {
+                zoomMode: 'xy'
+            }},
+            mouseActions: [{
+                plugin: 'zoom'
+            },{
+                plugin: 'zoom',
+                type: 'dblclick',
+                options: {
+                    mode: 'total'
+                }
+            },{
+                type: 'mousewheel',
+                callback: (event) => this.handleMousewheel(event)
+            }]
+        });
+    }
+}
+
+function getDiv(style, content = '') {
+    const div = document.createElement('div');
+    div.setAttribute('style', style + '; border: solid black;');
+    div.innerHTML = content;
+    return div;
 }
 
 module.exports = Enemere;

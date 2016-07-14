@@ -3,7 +3,7 @@
 const superagent = require('superagent');
 const Enemere = require('..');
 
-const enemere = new Enemere();
+const enemere = new Enemere(document.getElementById('mainView'));
 
 enemere.setFileLoader(function (filename) {
     return new Promise((resolve, reject) => {
@@ -13,7 +13,5 @@ enemere.setFileLoader(function (filename) {
         });
     });
 });
-
-enemere.setMainView(document.getElementById('mainView'));
 
 enemere.loadJcamp('data/ethylbenzene_noise/hmbc_0.jdx');
