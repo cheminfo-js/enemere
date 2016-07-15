@@ -45,14 +45,14 @@ class Enemere {
     }
 
     put2D(spectrum) {
-        var twoD = this.graph.newSerie('2d', {}, 'contour');
+        var twoD = this.graphView.mainGraph.newSerie('2d', {}, 'contour');
 
         this.twoDSerie = twoD;
         this.twoD = spectrum;
 
-        var rightAxis = this.graph.getRightAxis();
+        var rightAxis = this.graphView.mainGraph.getRightAxis();
         twoD.setYAxis(rightAxis);
-        var bottomAxis = this.graph.getBottomAxis();
+        var bottomAxis = this.graphView.mainGraph.getBottomAxis();
         twoD.setXAxis(bottomAxis);
 
         rightAxis.flip(true);
@@ -65,7 +65,7 @@ class Enemere {
 
     redraw2D() {
         this.twoDSerie.setData(this.twoD.getContours(this.zoomLevel));
-        this.graph.draw();
+        this.graphView.mainGraph.draw();
     }
 
     handleMousewheel(value) {
@@ -117,6 +117,7 @@ class Enemere {
 
         this.graphView = new GraphView();
         this.dom.graphs.appendChild(this.graphView.getDomContainer());
+        this.graphView.createMainGraph();
     }
 }
 

@@ -28,6 +28,36 @@ class GraphView {
         }
     }
 
+    createMainGraph() {
+        if (this.mode === '1d') {
+            throw new Error('1d not implemented');
+        } else if (this.mode === '2d') {
+            this.mainGraph = new Graph(this.dom.bottomRight, {
+                plugins: {
+                    zoom: {
+                        zoomMode: 'xy'
+                    }
+                },
+                mouseActions: [
+                    {
+                        plugin: 'zoom'
+                    }, {
+                        plugin: 'zoom',
+                        type: 'dblclick',
+                        options: {
+                            mode: 'total'
+                        }
+                    }, {
+                        type: 'mousewheel',
+                        callback: (event) => this.handleMousewheel(event)
+                    }
+                ]
+            });
+        } else {
+            throw new Error('unknown mode: ' + this.mode);
+        }
+    }
+
     getDomContainer() {
         return this.dom.container;
     }
@@ -55,32 +85,12 @@ class GraphView {
         this.dom.bottom = util.getDiv('flex: 8; display: flex');
         this.dom.container.appendChild(this.dom.bottom);
 
-        this.dom.bottomLeft = util.getDiv('flex: 1', 'bottomLeft');
+        this.dom.bottomLeft = util.getDiv('flex: 1');
         this.dom.bottom.appendChild(this.dom.bottomLeft);
 
-        this.dom.bottomRight = util.getDiv('flex: 8', 'bottomRight');
+        this.dom.bottomRight = util.getDiv('flex: 8');
         this.dom.bottom.appendChild(this.dom.bottomRight);
     }
 }
-
-/*
-this.graph = new Graph(this.dom.graphs, {
-            plugins: {zoom: {
-                zoomMode: 'xy'
-            }},
-            mouseActions: [{
-                plugin: 'zoom'
-            },{
-                plugin: 'zoom',
-                type: 'dblclick',
-                options: {
-                    mode: 'total'
-                }
-            },{
-                type: 'mousewheel',
-                callback: (event) => this.handleMousewheel(event)
-            }]
-        });
- */
 
 module.exports = GraphView;
