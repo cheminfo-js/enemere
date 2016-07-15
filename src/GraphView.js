@@ -12,7 +12,7 @@ class GraphView {
         this.updateVisibility();
     }
 
-    setLeftTrace(bool = true) {
+    showLeftTrace(bool = true) {
         bool = !!bool;
         if (this.hasLeftTrace !== bool) {
             this.hasLeftTrace = bool;
@@ -20,7 +20,7 @@ class GraphView {
         }
     }
 
-    setTopTrace(bool = true) {
+    showTopTrace(bool = true) {
         bool = !!bool;
         if (this.hasTopTrace !== bool) {
             this.hasTopTrace = bool;
@@ -53,9 +53,20 @@ class GraphView {
                     }
                 ]
             });
+            this.mainSerie = this.mainGraph.newSerie('2d', {}, 'contour');
+            var rightAxis = this.mainGraph.getRightAxis();
+            this.mainSerie.setYAxis(rightAxis);
+            var bottomAxis = this.mainGraph.getBottomAxis();
+            this.mainSerie.setXAxis(bottomAxis);
+            rightAxis.flip(true);
+            bottomAxis.flip(true);
         } else {
             throw new Error('unknown mode: ' + this.mode);
         }
+    }
+
+    setMainData(data) {
+        this.mainSerie.setData(data)
     }
 
     getDomContainer() {

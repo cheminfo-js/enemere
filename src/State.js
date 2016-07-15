@@ -4,6 +4,18 @@ class State {
     constructor(state = defaultState()) {
         this.state = state;
     }
+
+    getSpectrum(url) {
+        return this.state.spectra.find(spectrum => spectrum.url === url);
+    }
+
+    addSpectrum(spectrum) {
+        this.state.spectra.push(spectrum);
+    }
+
+    toJSON() {
+        return this.state;
+    }
 }
 
 module.exports = State;

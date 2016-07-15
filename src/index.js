@@ -33,38 +33,29 @@ class Enemere {
     }
 
     loadJcamp(path) {
+        var spectrum;
+        if (spectrum = this.state.getSpectrum(path)) {
+            this.loadSpectrum(spectrum);
+        }
         return this.fileLoader(path).then(jcamp => {
-            this.addSpectrum(Spectrum.fromJcamp(path, jcamp));
+            spectrum = Spectrum.fromJcamp(path, jcamp);
+            this.state.addSpectrum(spectrum);
+            this.loadSpectrum(spectrum);
         });
     }
 
-    addSpectrum(spectrum) {
-        this.spectra.push(spectrum);
+    loadSpectrum(spectrum) {
         spectrum.load();
         this.put2D(spectrum);
     }
 
     put2D(spectrum) {
-        var twoD = this.graphView.mainGraph.newSerie('2d', {}, 'contour');
-
-        this.twoDSerie = twoD;
         this.twoD = spectrum;
-
-        var rightAxis = this.graphView.mainGraph.getRightAxis();
-        twoD.setYAxis(rightAxis);
-        var bottomAxis = this.graphView.mainGraph.getBottomAxis();
-        twoD.setXAxis(bottomAxis);
-
-        rightAxis.flip(true);
-        bottomAxis.flip(true);
-   //     bottomAxis.forceMin(6.8).forceMax(7.6);
-    //    rightAxis.forceMin(6.8).forceMax(7.6);
         this.redraw2D();
-
     }
 
     redraw2D() {
-        this.twoDSerie.setData(this.twoD.getContours(this.zoomLevel));
+        this.graphView.setMainData(this.twoD.getContours(this.zoomLevel));
         this.graphView.mainGraph.draw();
     }
 
