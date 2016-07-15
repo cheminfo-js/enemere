@@ -7,10 +7,16 @@ const nmrMetadata = require('nmr-metadata');
 const range = require('js-range');
 
 class Spectrum {
-    constructor(kind, url, data, metadata) {
+    constructor(kind, url, fileloader, metadata) {
         this.kind = kind;
         this.url = url;
-        this.data = data;
+        this.fileloader = fileloader;
+        this.setMetadata(metadata);
+        this.data = null;
+        // todo store preprocessing steps and reapply on load (phase, baseline corrections)
+    }
+
+    setMetadata(metadata) {
         this.title = metadata.title || '';
         this.date = metadata.date || 0;
         this.dimension = metadata.dimension || 0;
@@ -20,14 +26,12 @@ class Spectrum {
         this.frequency = metadata.frequency || 0;
         this.pulse = metadata.pulse || '';
         this.experiment = metadata.experiment || '';
-        // todo store preprocessing steps and reapply on load (phase, baseline corrections)
-    }
-
-    static fromJcamp(url, jcamp) {
-        return new Spectrum('jcamp', url, jcamp, nmrMetadata.parseJcamp(jcamp));
     }
 
     load() {
+        if (this.data) {
+            return this.data;
+        }
         switch (this.kind) {
             case 'jcamp':
                 return this.loadJcamp();
@@ -37,22 +41,25 @@ class Spectrum {
     }
 
     loadJcamp() {
-        var parsed = jcampconverter.convert(this.data, {
-            noContour: true
-        });
-        if (this.dimension === 1) {
-            throw new Error('unimplemented: 1D jcamp');
-        } else if (this.dimension === 2) {
-            if (!parsed.minMax) {
-                throw new Error('2D data is missing');
+        return this.data = this.fileloader(this.url).then(jcamp => {
+            this.setMetadata(nmrMetadata.parseJcamp(jcamp));
+            var parsed = jcampconverter.convert(jcamp, {
+                noContour: true
+            });
+            if (this.dimension === 1) {
+                throw new Error('unimplemented: 1D jcamp');
+            } else if (this.dimension === 2) {
+                if (!parsed.minMax) {
+                    throw new Error('2D data is missing');
+                }
+                this.minMax = parsed.minMax;
+                const xs = getRange(parsed.minMax.minY, parsed.minMax.maxY, parsed.minMax.z.length);
+                const ys = getRange(parsed.minMax.minX, parsed.minMax.maxX, parsed.minMax.z[0].length);
+                this.conrec = new Conrec(parsed.minMax.z, {xs, ys});
+            } else {
+                throw new Error('unexpected dimension: ' + this.dimension);
             }
-            this.minMax = parsed.minMax;
-            const xs = getRange(parsed.minMax.minY, parsed.minMax.maxY, parsed.minMax.z.length);
-            const ys = getRange(parsed.minMax.minX, parsed.minMax.maxX, parsed.minMax.z[0].length);
-            this.conrec = new Conrec(parsed.minMax.z, {xs, ys});
-        } else {
-            throw new Error('unexpected dimension: ' + this.dimension);
-        }
+        });
     }
 
     getContours(zoomLevel) {

@@ -53,10 +53,12 @@ class GraphView {
                     }
                 ]
             });
-            this.mainSerie = this.mainGraph.newSerie('2d', {}, 'contour');
-            var rightAxis = this.mainGraph.getRightAxis();
+            this.mainSerie = this.mainGraph.newSerie('2d', {
+                selectableOnClick: false
+            }, 'contour');
+            var rightAxis = this.mainGraph.getRightAxis(0, {nbTicksPrimary: 10});
             this.mainSerie.setYAxis(rightAxis);
-            var bottomAxis = this.mainGraph.getBottomAxis();
+            var bottomAxis = this.mainGraph.getBottomAxis(0, {nbTicksPrimary: 10});
             this.mainSerie.setXAxis(bottomAxis);
             rightAxis.flip(true);
             bottomAxis.flip(true);

@@ -12,10 +12,6 @@ class Enemere {
         };
         this.state = new State(options.state);
         this.fileLoader = null;
-        this.spectra = [];
-        this.zoomLevel = 1;
-        this.width = 0;
-        this.height = 0;
         this.setupDom();
     }
 
@@ -24,29 +20,22 @@ class Enemere {
     }
 
     onResize() {
-        if (this.dom.root) {
-            const width = this.dom.root.clientWidth;
-            const height = this.dom.root.clientHeight;
-            this.width = width;
-            this.height = height;
-        }
+        // todo call this method when the viewport is resized and forward to GraphView
     }
 
     loadJcamp(path) {
-        var spectrum;
-        if (spectrum = this.state.getSpectrum(path)) {
-            this.loadSpectrum(spectrum);
-        }
-        return this.fileLoader(path).then(jcamp => {
-            spectrum = Spectrum.fromJcamp(path, jcamp);
+        var spectrum = this.state.getSpectrum(path);
+        if (!spectrum) {
+            spectrum = new Spectrum('jcamp', path, this.fileLoader);
             this.state.addSpectrum(spectrum);
-            this.loadSpectrum(spectrum);
-        });
+        }
+        this.loadSpectrum(spectrum);
     }
 
     loadSpectrum(spectrum) {
-        spectrum.load();
-        this.put2D(spectrum);
+        spectrum.load().then(() => {
+            this.put2D(spectrum);
+        });
     }
 
     put2D(spectrum) {
