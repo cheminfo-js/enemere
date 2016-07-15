@@ -7,16 +7,21 @@ const nmrMetadata = require('nmr-metadata');
 const range = require('js-range');
 
 class Spectrum {
-    constructor(kind, url, fileloader, metadata) {
+    constructor(id, kind, url, fileloader, metadata) {
+        this.id = id;
+        this.name = id;
         this.kind = kind;
         this.url = url;
         this.fileloader = fileloader;
         this.setMetadata(metadata);
-        this.data = null;
+        this.loading = null;
         // todo store preprocessing steps and reapply on load (phase, baseline corrections)
     }
 
     setMetadata(metadata) {
+        if (!metadata) {
+            return;
+        }
         this.title = metadata.title || '';
         this.date = metadata.date || 0;
         this.dimension = metadata.dimension || 0;
@@ -29,8 +34,8 @@ class Spectrum {
     }
 
     load() {
-        if (this.data) {
-            return this.data;
+        if (this.loading) {
+            return this.loading;
         }
         switch (this.kind) {
             case 'jcamp':
@@ -41,7 +46,7 @@ class Spectrum {
     }
 
     loadJcamp() {
-        return this.data = this.fileloader(this.url).then(jcamp => {
+        return this.loading = this.fileloader(this.url).then(jcamp => {
             this.setMetadata(nmrMetadata.parseJcamp(jcamp));
             var parsed = jcampconverter.convert(jcamp, {
                 noContour: true

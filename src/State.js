@@ -5,12 +5,24 @@ class State {
         this.state = state;
     }
 
-    getSpectrum(url) {
+    getSpectrumById(id) {
+        return this.state.spectra.find(spectrum => spectrum.id === id);
+    }
+
+    getSpectrumByUrl(url) {
         return this.state.spectra.find(spectrum => spectrum.url === url);
     }
 
     addSpectrum(spectrum) {
         this.state.spectra.push(spectrum);
+    }
+
+    getNextSpectrumId() {
+        return this.state.spectrumId++;
+    }
+
+    addPage(page) {
+        this.state.pages.push(page);
     }
 
     toJSON() {
@@ -27,6 +39,7 @@ function defaultState() {
         },
         spectra: [],
         pages: [],
-        currentPage: 0
+        currentPage: 0,
+        spectrumId: 0
     };
 }

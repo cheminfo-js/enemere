@@ -24,39 +24,21 @@ class Enemere {
     }
 
     loadJcamp(path) {
-        var spectrum = this.state.getSpectrum(path);
+        var spectrum = this.state.getSpectrumByUrl(path);
         if (!spectrum) {
-            spectrum = new Spectrum('jcamp', path, this.fileLoader);
+            spectrum = new Spectrum(this.state.getNextSpectrumId(), 'jcamp', path, this.fileLoader);
             this.state.addSpectrum(spectrum);
+            // Each individual spectrum has an associated GraphView
+            const graphView = new GraphView();
+            this.state.addPage(graphView);
+            this.setGraphView(graphView);
+            graphView.addMainSpectrum(spectrum);
         }
-        this.loadSpectrum(spectrum);
     }
 
-    loadSpectrum(spectrum) {
-        spectrum.load().then(() => {
-            this.put2D(spectrum);
-        });
-    }
-
-    put2D(spectrum) {
-        this.twoD = spectrum;
-        this.redraw2D();
-    }
-
-    redraw2D() {
-        this.graphView.setMainData(this.twoD.getContours(this.zoomLevel));
-        this.graphView.mainGraph.draw();
-    }
-
-    handleMousewheel(value) {
-        if (Math.sign(value) === -1) {
-            // zoom out
-            this.zoomLevel++;
-            this.redraw2D();
-        } else {
-            this.zoomLevel--;
-            this.redraw2D();
-        }
+    setGraphView(graphView) {
+        this.dom.graphs.innerHTML = '';
+        this.dom.graphs.appendChild(graphView.getDomContainer());
     }
 
     setupDom() {
@@ -94,10 +76,6 @@ class Enemere {
 
         this.dom.graphs = util.getDiv('flex: 1');
         this.dom.content.appendChild(this.dom.graphs);
-
-        this.graphView = new GraphView();
-        this.dom.graphs.appendChild(this.graphView.getDomContainer());
-        this.graphView.createMainGraph();
     }
 }
 

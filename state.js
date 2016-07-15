@@ -22,6 +22,7 @@ var state = {
             // ... other metadata
         }
     ],
+    spectrumId: 0, // ID for the next loaded spectrum
     // A page corresponds to an NMR view of one or multiple spectra
     pages: [
         {
@@ -45,6 +46,6 @@ var state = {
             }
         }
     ],
-    // Page that is currently loaded in jsgraph
+    // Page that is currently loaded
     currentPage: 0
 };
