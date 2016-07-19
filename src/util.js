@@ -12,3 +12,24 @@ exports.removeChildren = function removeChildren(element) {
         element.removeChild(element.firstChild);
     }
 };
+
+exports.stopEvent = function stopEvent(e) {
+    e.stopPropagation();
+    e.preventDefault();
+};
+
+exports.validateTransferType = function (dataTransfer) {
+    console.log(dataTransfer.types);
+    if (dataTransfer.types) {
+        for (var i = 0; i < dataTransfer.types.length; i++) {
+            var type = dataTransfer.types[i];
+            if (type === 'Files') {
+                return 'files';
+            }
+            if (type === 'text/uri-list' || type === 'text/x-moz-url') {
+                return 'url';
+            }
+        }
+    }
+    return false;
+};

@@ -44,7 +44,7 @@ class Enemere {
     setupDom() {
         this.dom.root.innerHTML = '';
         this.onResize();
-        this.dom.main = util.getDiv('height: 100%; width: 100%; display: flex; flex-direction: column');
+        this.dom.main = util.getDiv('position: relative; height: 100%; width: 100%; display: flex; flex-direction: column');
         this.dom.root.appendChild(this.dom.main);
 
         this.dom.menu = util.getDiv('height: 40px', 'top menu');
@@ -76,6 +76,38 @@ class Enemere {
 
         this.dom.graphs = util.getDiv('flex: 1');
         this.dom.content.appendChild(this.dom.graphs);
+
+        this.setupDragDrop();
+    }
+
+    setupDragDrop() {
+        this.dom.dropZone = util.getDiv('height: 100%; width: 100%; position: absolute; top: 0; bottom: 0; background: black; color: white; display: none', 'test');
+        this.dom.main.appendChild(this.dom.dropZone);
+        this.dom.main.addEventListener('dragenter', (e) => {
+            if (util.validateTransferType(e.dataTransfer)) {
+                this.showDropZone();
+                util.stopEvent(e);
+            }
+        });
+        this.dom.dropZone.addEventListener('dragenter', util.stopEvent);
+        this.dom.dropZone.addEventListener('dragover', util.stopEvent);
+        this.dom.dropZone.addEventListener('dragleave', (e) => {
+            this.hideDropZone();
+            util.stopEvent(e);
+        });
+        this.dom.dropZone.addEventListener('drop', (e) => {
+            console.log('todo: load files');
+            this.hideDropZone();
+            util.stopEvent(e);
+        });
+    }
+
+    showDropZone() {
+        this.dom.dropZone.style.display = 'block';
+    }
+
+    hideDropZone() {
+        this.dom.dropZone.style.display = 'none';
     }
 }
 
