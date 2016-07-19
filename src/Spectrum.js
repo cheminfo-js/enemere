@@ -49,10 +49,11 @@ class Spectrum {
         return this.loading = this.fileloader(this.url).then(jcamp => {
             this.setMetadata(nmrMetadata.parseJcamp(jcamp));
             var parsed = jcampconverter.convert(jcamp, {
-                noContour: true
+                noContour: true,
+                xy: true
             });
             if (this.dimension === 1) {
-                throw new Error('unimplemented: 1D jcamp');
+                this.data = parsed.spectra[0].data[0];
             } else if (this.dimension === 2) {
                 if (!parsed.minMax) {
                     throw new Error('2D data is missing');

@@ -46,25 +46,37 @@ class GraphView {
                 this.mainSpectra.push(specData);
                 this.mode = requiredMode;
                 this.createSerie(specData);
-                this.redraw2D();
+                this.redraw();
             }
         });
     }
 
     createSerie(specData) {
         this.createMainGraph(this.mode);
-        if (this.mode === '2d') {
+        if (this.mode === '1d') {
+            const serie = this.mainGraph.newSerie('1d', {
+                selectableOnClick: false
+            }, 'line');
+            const rightAxis = this.mainGraph.getRightAxis(0, {nbTicksPrimary: 10});
+            serie.setYAxis(rightAxis);
+            const bottomAxis = this.mainGraph.getBottomAxis(0, {nbTicksPrimary: 10});
+            serie.setXAxis(bottomAxis);
+            rightAxis.hide();
+            bottomAxis.flip(true);
+            specData.serie = serie;
+        } else {
             const serie = this.mainGraph.newSerie('2d', {
                 selectableOnClick: false
             }, 'contour');
-            var rightAxis = this.mainGraph.getRightAxis(0, {nbTicksPrimary: 10});
+            const rightAxis = this.mainGraph.getRightAxis(0, {nbTicksPrimary: 10});
             serie.setYAxis(rightAxis);
-            var bottomAxis = this.mainGraph.getBottomAxis(0, {nbTicksPrimary: 10});
+            const bottomAxis = this.mainGraph.getBottomAxis(0, {nbTicksPrimary: 10});
             serie.setXAxis(bottomAxis);
             rightAxis.flip(true);
             bottomAxis.flip(true);
             specData.serie = serie;
         }
+
     }
 
     createMainGraph(mode) {
@@ -72,7 +84,33 @@ class GraphView {
             return;
         }
         if (mode === '1d') {
-            throw new Error('1d not implemented');
+            this.mainGraph = new Graph(this.dom.bottomRight, {
+                plugins: {
+                    zoom: {
+                        zoomMode: 'x'
+                    }
+                },
+                mouseActions: [
+                    {
+                        plugin: 'zoom'
+                    },
+                    {
+                        plugin: 'zoom',
+                        type: 'dblclick',
+                        options: {
+                            mode: 'total'
+                        }
+                    },
+                    {
+                        plugin: 'zoom',
+                        type: 'mousewheel',
+                        options: {
+                            baseline: 0,
+                            direction: 'y'
+                        }
+                    }
+                ]
+            })
         } else if (mode === '2d') {
             this.mainGraph = new Graph(this.dom.bottomRight, {
                 plugins: {
@@ -98,6 +136,20 @@ class GraphView {
         } else {
             throw new Error('unknown mode: ' + mode);
         }
+    }
+
+    redraw() {
+        if (this.mode === '1d') {
+            this.redraw1D();
+        } else {
+            this.redraw2D();
+        }
+    }
+
+    redraw1D() {
+        const spectrum = this.mainSpectra[0];
+        spectrum.serie.setData(spectrum.spectrum.data);
+        this.mainGraph.draw();
     }
 
     redraw2D() {

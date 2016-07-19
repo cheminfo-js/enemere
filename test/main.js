@@ -14,4 +14,4 @@ enemere.setFileLoader(function (filename) {
     });
 });
 
-//enemere.loadJcamp('data/ethylbenzene_noise/hmbc_0.jdx');
+enemere.loadJcamp('data/ethylbenzene_noise/h1_0.jdx');
