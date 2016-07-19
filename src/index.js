@@ -37,7 +37,7 @@ class Enemere {
     }
 
     setGraphView(graphView) {
-        this.dom.graphs.innerHTML = '';
+        util.removeChildren(this.dom.graphs);
         this.dom.graphs.appendChild(graphView.getDomContainer());
     }
 

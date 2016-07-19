@@ -6,3 +6,9 @@ exports.getDiv = function getDiv(style, content = '') {
     div.innerHTML = content;
     return div;
 };
+
+exports.removeChildren = function removeChildren(element) {
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+};
