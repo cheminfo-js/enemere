@@ -78,8 +78,8 @@ class Spectrum {
         const positiveRange = getRange(median * 4 * Math.pow(2, zoomLevel), max * 20 / 100, 10, 2);
         const negativeRange = getRange(-max * 20 / 100, -median * 4 * Math.pow(2, zoomLevel), 10, 2);
         const contours = conrec.drawContour({
-            levels: positiveRange,
-            // keepLevels: true
+            levels: negativeRange.concat(positiveRange),
+            timeout: 1000
         });
         return {
             minX: this.minMax.minY,
