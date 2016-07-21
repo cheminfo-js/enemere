@@ -77,11 +77,17 @@ class Spectrum {
         const max = Math.max(Math.abs(this.minMax.maxZ), Math.abs(this.minMax.minZ));
         const positiveRange = getRange(median * 4 * Math.pow(2, zoomLevel), max * 20 / 100, 10, 2);
         const negativeRange = getRange(-max * 20 / 100, -median * 4 * Math.pow(2, zoomLevel), 10, 2);
-        const contours = conrec.getContours({
+        const contours = conrec.drawContour({
             levels: positiveRange,
-       //     keepLevels: true
+            // keepLevels: true
         });
-        return conrecToNorman(contours, this.minMax);
+        return {
+            minX: this.minMax.minY,
+            maxX: this.minMax.maxY,
+            minY: this.minMax.minX,
+            maxY: this.minMax.maxX,
+            segments: contours
+        };
     }
 
     getDoubleMedian() {
@@ -106,36 +112,13 @@ function getRange(min, max, length, exp) {
 
         var result = new Array(length);
         for (var i = 0; i < length; i++) {
-            result[i] = (max - min) * (1 - factors[i]/lastFactor) + min;
+            result[i] = (max - min) * (1 - factors[i] / lastFactor) + min;
         }
         return result;
     } else {
         const step = (max - min) / (length - 1);
         return range(min, max + step, step);
     }
-}
-
-function conrecToNorman(contours, minMax) {
-    var data = {
-        minX: minMax.minY,
-        maxX: minMax.maxY,
-        minY: minMax.minX,
-        maxY: minMax.maxX,
-        segments: []
-    };
-    var segments = data.segments;
-    for (var i = 0; i < contours.length; i++) {
-        var contour = contours[i];
-        if (!segments[contour.k]) segments[contour.k] = {
-            lines: [],
-            zValue: contour.level
-        };
-        var segment = segments[contour.k].lines;
-        for (var j = 0; j < contour.length - 1; j++) {
-            segment.push(contour[j].y, contour[j].x, contour[j + 1].y, contour[j + 1].x);
-        }
-    }
-    return data;
 }
 
 module.exports = Spectrum;

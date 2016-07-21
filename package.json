@@ -30,7 +30,7 @@
   "dependencies": {
     "jcampconverter": "^2.6.0",
     "js-range": "^1.0.0",
-    "ml-conrec": "0.0.2",
+    "ml-conrec": "^1.0.0",
     "ml-stat": "^1.2.0",
     "nmr-metadata": "^1.0.0",
     "node-jsgraph": "^1.14.10-5"
