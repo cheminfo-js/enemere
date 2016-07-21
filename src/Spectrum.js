@@ -74,8 +74,9 @@ class Spectrum {
         }
         const conrec = this.conrec;
         const median = this.getDoubleMedian();
-        const max = this.minMax.maxZ;
+        const max = Math.max(Math.abs(this.minMax.maxZ), Math.abs(this.minMax.minZ));
         const positiveRange = getRange(median * 4 * Math.pow(2, zoomLevel), max * 20 / 100, 10, 2);
+        const negativeRange = getRange(-max * 20 / 100, -median * 4 * Math.pow(2, zoomLevel), 10, 2);
         const contours = conrec.getContours({
             levels: positiveRange,
        //     keepLevels: true

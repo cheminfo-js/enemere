@@ -17,8 +17,11 @@ var state = {
         {
             id: 'spectrum0', // generated
             name: 'spectrum0', // editable by the user
+            url: 'xxx',
             title: 'xxx',
             dimension: 1,
+            shiftX: 0,
+            shiftY: 0
             // ... other metadata
         }
     ],
@@ -32,7 +35,9 @@ var state = {
                     options: {
                         levelsPos: 15 // override for this spectrum in this page
                     },
-                    zoomLevel: 1 // current z-axis zoom
+                    zoomLevel: 1,  // current z-axis zoom,
+                    shiftX: 0,
+                    shiftY: 0
                 }
             ],
             // contains quick view change info, indexed by key number
