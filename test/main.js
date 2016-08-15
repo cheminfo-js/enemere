@@ -1,7 +1,7 @@
 'use strict';
 
-const superagent = require('superagent');
-const Enemere = require('..');
+import superagent from 'superagent';
+import Enemere from '..';
 
 const enemere = new Enemere(document.getElementById('mainView'));
 
