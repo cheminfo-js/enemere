@@ -25,7 +25,7 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        name: 'my friend'
+        name: state.name
     };
 }
 

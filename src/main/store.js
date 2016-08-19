@@ -2,6 +2,8 @@
 
 import {createStore} from 'redux';
 
-export default function getStore(previousStore) {
-    return createStore(() => 0);
+import rootReducer from '../reducers/rootReducer';
+
+export default function getStore(previousState) {
+    return createStore(rootReducer, previousState);
 }
